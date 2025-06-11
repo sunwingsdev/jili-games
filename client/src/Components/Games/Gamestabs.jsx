@@ -2,43 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
 import { AiOutlineSearch } from "react-icons/ai";
 import GameTabContent from "./GameTabContent";
-
-// Icon imports
-import allGamesIcon from "../../assets/Logos/icon-All.png";
-import hotIcon from "../../assets/Logos/icon-Hot.png";
-import slotIcon from "../../assets/Logos/icon-Slots.png";
-import fishIcon from "../../assets/Logos/icon-Fish.png";
-import pokerIcon from "../../assets/Logos/icon-Poker.png";
-import bingoIcon from "../../assets/Logos/icon-Bingo.png";
-import fastIcon from "../../assets/Logos/icon-Fast.png";
-
-const menuItems = [
-  { id: "all", key: "All Games", name: "All Games", icon: allGamesIcon },
-  { id: "popular", key: "Popular", name: "Popular", icon: hotIcon },
-  { id: "slot", key: "Slot", name: "Slot", icon: slotIcon },
-  { id: "fishing", key: "Fishing", name: "Fishing", icon: fishIcon },
-  {
-    id: "tableAndCard",
-    key: "TableAndCard",
-    name: "Table and Card",
-    icon: pokerIcon,
-  },
-  { id: "bingo", key: "Bingo", name: "Bingo", icon: bingoIcon },
-  { id: "casino", key: "Casino", name: "Casino", icon: fastIcon },
-];
+import { useGetAllCategoriesQuery } from "../../redux/features/allApis/categoryApi/categoryApi";
 
 const GameTabs = () => {
   const location = useLocation();
-  const [activeKey, setActiveKey] = useState(menuItems[0].key);
+  const { data: allCategories } = useGetAllCategoriesQuery();
+  const [activeKey, setActiveKey] = useState("");
   const tabRefs = useRef({});
   const tabBarRef = useRef(null);
+
+  useEffect(() => {
+    if (allCategories?.length > 0 && !activeKey) {
+      setActiveKey(allCategories[0].name);
+    }
+  }, [allCategories, activeKey]);
 
   // ✅ Sets the active tab based on route state (if scrollToId is provided)
   useEffect(() => {
     const scrollToId = location.state?.scrollToId;
-    const matched = menuItems.find((tab) => tab.id === scrollToId);
-    if (matched) setActiveKey(matched.key);
-  }, [location.state]);
+    const matched = allCategories?.find((tab) => tab.id === scrollToId);
+    if (matched) setActiveKey(matched.name);
+  }, [location.state, allCategories]);
 
   // ✅ Scrolls the page to the content section corresponding to scrollToId
   useEffect(() => {
@@ -73,14 +57,14 @@ const GameTabs = () => {
         ref={tabBarRef}
         className="flex sticky top-14 md:top-16 bg-black bg-opacity-80 backdrop-blur-md z-10 flex-row justify-start md:justify-center items-center gap-x-4 overflow-x-auto shadow-md md:px-4 lg:px-8 pl-4 scroll-smooth"
       >
-        {menuItems.map(({ id, key, name, icon }) => {
-          const isActive = key === activeKey;
+        {allCategories?.map(({ _id, name, image }) => {
+          const isActive = name === activeKey;
           return (
             <div
-              key={key}
-              id={id}
-              ref={(el) => (tabRefs.current[key] = el)}
-              onClick={() => setActiveKey(key)}
+              key={_id}
+              id={_id}
+              ref={(el) => (tabRefs.current[_id] = el)}
+              onClick={() => setActiveKey(name)}
               className={`flex flex-col items-center cursor-pointer relative transition-all duration-200 py-1 md:py-1 md:px-4 md:w-[88px] lg:w-full group
                 ${
                   isActive
@@ -88,18 +72,26 @@ const GameTabs = () => {
                     : "hover:bg-[#FCC40D] px-2 text-white"
                 }`}
             >
-              <div className="relative w-20 md:w-24 lg:w-[80%] group">
-                <img src={icon} alt={name} className="object-contain w-full" />
+              <div className="relative w-20 md:w-24 lg:w-[80%] group flex items-center justify-center">
+                <img
+                  src={`${import.meta.env.VITE_BASE_API_URL}${image}`}
+                  alt={name}
+                  className=""
+                />
                 <div
                   className={`absolute inset-0 transition duration-300 ${
                     isActive ? "bg-black" : "group-hover:bg-black"
                   }`}
                   style={{
-                    WebkitMaskImage: `url(${icon})`,
+                    WebkitMaskImage: `url(${`${
+                      import.meta.env.VITE_BASE_API_URL
+                    }${image}`})`,
                     WebkitMaskRepeat: "no-repeat",
                     WebkitMaskSize: "contain",
                     WebkitMaskPosition: "center",
-                    maskImage: `url(${icon})`,
+                    maskImage: `url(${`${
+                      import.meta.env.VITE_BASE_API_URL
+                    }${image}`})`,
                     maskRepeat: "no-repeat",
                     maskSize: "contain",
                     maskPosition: "center",
@@ -121,7 +113,7 @@ const GameTabs = () => {
       {/* Tab Header and Search */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 px-4 md:px-6 lg:px-8 mt-4">
         <h2 className="text-textYellow text-2xl md:text-4xl lg:text-5xl uppercase font-bold">
-          {menuItems.find((item) => item.key === activeKey)?.name}
+          {allCategories?.find((item) => item?.name === activeKey)?.name}
         </h2>
         <div className="flex items-center gap-2">
           <input

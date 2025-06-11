@@ -4,7 +4,6 @@ const ImageGridSmall = ({ images, setModalData }) => {
   const navigate = useNavigate();
   const smMdPattern = [1, 2, 2];
 
-  // Split images into chunks based on the pattern for layout
   const chunkImagesByPattern = (arr, pattern) => {
     const chunks = [];
     let i = 0,
@@ -37,25 +36,26 @@ const ImageGridSmall = ({ images, setModalData }) => {
               className="relative group rounded-lg shadow-md overflow-hidden cursor-pointer"
             >
               <img
-                src={item.image}
+                src={item.src} // ✅ Use `src` instead of `image`
                 alt={`game-${idx}-${i}`}
-                className="w-full h-48   "
+                className="w-full h-48 object-cover"
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white text-center px-2 pointer-events-none group-hover:pointer-events-auto">
-                <h3 className=" uppercase font-bold mb-3">{item.name}</h3>
+                <h3 className="uppercase font-bold mb-3">{item.title}</h3>{" "}
+                {/* ✅ Use `title` instead of `name` */}
                 <button
                   onClick={() => setModalData(item)}
-                  className="mb-2 bg-bgYellow text-black font-semibold py-1 w-[85%]  rounded-md"
+                  className="mb-2 bg-bgYellow text-black font-semibold py-1 w-[85%] rounded-md"
                 >
                   Play Now
                 </button>
                 <button
                   onClick={() =>
-                    navigate(`/game/${item.id}`, {
-                      state: { source: "tabImages" },
+                    navigate(`/game/${item._id}`, {
+                      state: { source: "allHomeGames" }, // ✅ better name
                     })
                   }
-                  className="bg-black whitespace-nowrap w-[85%]  font-semibold py-1 px-4 rounded-md"
+                  className="bg-black whitespace-nowrap w-[85%] font-semibold py-1 px-4 rounded-md"
                 >
                   Game Info
                 </button>
