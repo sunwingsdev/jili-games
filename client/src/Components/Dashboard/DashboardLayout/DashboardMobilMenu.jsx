@@ -3,32 +3,23 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { Link, Navigate } from "react-router";
 import { FaRegUserCircle, FaRegCircle } from "react-icons/fa";
-// import { useGetHomeControlsQuery } from "@/redux/features/allApis/homeControlApi/homeControlApi";
-// import {
-//   useDispatch,
-//   useSelector,
-// } from "react-redux";
-// import { logout } from "@/redux/slices/authSlice";
+
 import toast from "react-hot-toast";
+import { useGetHomeControlsQuery } from "../../../redux/features/allApis/homeControlApi/homeControlApi";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
 
 const DashboardMobilMenu = ({ open, menuItems, logOutPath, dashboardLink }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [openSubmenu, setOpenSubmenu] = useState(null); // Store the currently open submenu
+  const [openSubmenu, setOpenSubmenu] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  //   const { data: homeControls } = useGetHomeControlsQuery();
-  //   const dispatch = useDispatch();
-  //   const { user } = useSelector((state) => state.auth);
+  const { data: homeControls } = useGetHomeControlsQuery();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
-  // sample user data
-  const user = {
-    _id: "123",
-    name: "John Doe",
-    email: "john@example.com",
-  };
-
-  //   const logoHomeControl = homeControls?.find(
-  //     (control) => control.category === "logo" && control.isSelected === true
-  //   );
+  const logoHomeControl = homeControls?.find(
+    (control) => control.category === "logo" && control.isSelected === true
+  );
 
   // Toggle the sidebar
   const toggleSidebar = () => {
@@ -55,7 +46,7 @@ const DashboardMobilMenu = ({ open, menuItems, logOutPath, dashboardLink }) => {
   };
 
   const handleLogout = () => {
-    // dispatch(logout());
+    dispatch(logout());
     localStorage.removeItem("token");
     toast.success("Logout successful");
 
@@ -122,7 +113,7 @@ const DashboardMobilMenu = ({ open, menuItems, logOutPath, dashboardLink }) => {
                   to={"/"}
                   className="flex items-center gap-1 px-2 py-0.5 rounded-lg"
                 >
-                  {/* {logoHomeControl?.image ? (
+                  {logoHomeControl?.image ? (
                     <img
                       className="w-20"
                       src={`${import.meta.env.VITE_BASE_API_URL}${
@@ -132,7 +123,7 @@ const DashboardMobilMenu = ({ open, menuItems, logOutPath, dashboardLink }) => {
                     />
                   ) : (
                     <div className="h-10"></div>
-                  )} */}
+                  )}
                 </Link>
               </div>
             </div>

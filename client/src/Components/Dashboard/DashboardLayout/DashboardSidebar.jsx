@@ -1,29 +1,29 @@
-// import Modal from "@/components/shared/Modal";
-// import { useGetHomeControlsQuery } from "@/redux/features/allApis/homeControlApi/homeControlApi";
 import { useState } from "react";
 import { FaAngleDown, FaRegCircle } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 
 import { Link } from "react-router";
+import { useGetHomeControlsQuery } from "../../../redux/features/allApis/homeControlApi/homeControlApi";
+import Modal from "../../Shared/Modal";
 
 const DashboardSidebar = ({ open, setOpen, menuItems }) => {
-  //   const { data: homeControls } = useGetHomeControlsQuery();
-  //   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: homeControls } = useGetHomeControlsQuery();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState({
     GamesControl: false,
     GamesApikey: false,
-    OracleTechnology: false, // Track submenu state for Games Control
-    Bonuses: false, // Track submenu state for Games Control
-    gameHistory: false, // Track submenu state for Games Control
-    Fontend: false, // Track submenu state for Games Control
-    BankingDeposit: false, // Track submenu state for Games Control
-    BankingWithdrow: false, // Track submenu state for Games Control
-    Settings: false, // Track submenu state for Games Control
+    OracleTechnology: false,
+    Bonuses: false,
+    gameHistory: false,
+    Fontend: false,
+    BankingDeposit: false,
+    BankingWithdrow: false,
+    Settings: false,
   });
 
-  //   const logoHomeControl = homeControls?.find(
-  //     (control) => control.category === "logo" && control.isSelected === true
-  //   );
+  const logoHomeControl = homeControls?.find(
+    (control) => control.category === "logo" && control.isSelected === true
+  );
 
   // Toggle submenu visibility
   const toggleSubmenu = (menu) => {
@@ -40,9 +40,9 @@ const DashboardSidebar = ({ open, setOpen, menuItems }) => {
   };
 
   // Close modal
-  //   const handleModalClose = () => {
-  //     setIsModalOpen(false);
-  //   };
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div>
@@ -59,7 +59,7 @@ const DashboardSidebar = ({ open, setOpen, menuItems }) => {
                 to={"/"}
                 className="flex items-center gap-1 px-2 py-0.5 rounded-lg"
               >
-                {/* {logoHomeControl?.image ? (
+                {logoHomeControl?.image ? (
                   <img
                     className="w-20"
                     src={`${import.meta.env.VITE_BASE_API_URL}${
@@ -69,7 +69,7 @@ const DashboardSidebar = ({ open, setOpen, menuItems }) => {
                   />
                 ) : (
                   <div className="h-10"></div>
-                )} */}
+                )}
               </Link>
             </div>
             <div>
@@ -135,13 +135,13 @@ const DashboardSidebar = ({ open, setOpen, menuItems }) => {
       </div>
 
       {/* Modal */}
-      {/* <Modal
+      <Modal
         title={"Oops!!!"}
         isOpen={isModalOpen}
         onOpenChange={handleModalClose}
       >
         <p>Please contact your developer team to connect API!!!</p>
-      </Modal> */}
+      </Modal>
     </div>
   );
 };

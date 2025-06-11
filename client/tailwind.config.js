@@ -1,11 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-
 export default {
-  darkMode: ["class"],
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}", // Adjust this based on your file structure
-    "./node_modules/@shadcn/ui/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       borderRadius: {
@@ -26,7 +21,7 @@ export default {
         componentBgSecondary: "#243254",
         redBgColor: "#91001F99",
         backgroundSecondaryColor: "#C9A33D",
-        backgroundV2Color: "#ffE116",
+        backgroundV2Color: "#ffe116",
         formBgColor: "rgba(255, 255, 255, 0.3)",
         AffiliatePrimaryBg: "#212335",
         bottomNavBgColor: "#2a3254",
@@ -62,12 +57,12 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         border: "hsl(var(--border))",
-        textSecondaryColor: "#C9A33D",
-        textSecondaryColorTwo: "#d7b533",
-        textSecondaryColorThree: "#ffE116",
-        textRedColor: "#ff086b",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        textSecondaryColor: "#C9A33D",
+        textSecondaryColorTwo: "#d7b533",
+        textSecondaryColorThree: "#ffe116",
+        textRedColor: "#ff086b",
         chart: {
           1: "hsl(var(--chart-1))",
           2: "hsl(var(--chart-2))",
@@ -77,17 +72,16 @@ export default {
         },
       },
       backgroundImage: {
-        // 'gradient-gold': 'linear-gradient(to right, #ffd700, #ffa500)'
         tabGradient: "linear-gradient(10deg, #ffffff 0%, #ffff7f 100%)",
         "white-to-darkblue":
           "linear-gradient(to right, #2a3254 0%, #445187 15%, #445187 30%, #2a3254 55%, #2a3254 100%)",
         "white-to-gold":
           "linear-gradient(to right, rgba(255,255,255,0.2), #C9A33Dcc)",
-        // 'gold-gradient': 'linear-gradient(to right, #d4b665, #a46c0d 50%)',
         "gold-gradient":
           "linear-gradient(to right, #d4b665, #a46c0d 50%, #C9A33D)",
       },
     },
   },
+
   plugins: [],
 };
