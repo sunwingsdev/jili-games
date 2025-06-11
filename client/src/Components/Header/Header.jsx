@@ -2,12 +2,16 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import { Link as ScrollLink } from "react-scroll";
 import { FiMenu, FiX } from "react-icons/fi";
-
 import languageImage from "../../assets/Logos/world_white.svg";
-import mainLogo from "../../assets/Logos/logo_jili_us-en.png";
+import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 
 const Header = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { data: homeControls } = useGetHomeControlsQuery();
+
+  const logoHomeControl = homeControls?.find(
+    (control) => control.category === "logo" && control.isSelected === true
+  );
 
   // React Router location for active link detection
   const location = useLocation();
@@ -25,7 +29,18 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/">
-              <img src={mainLogo} alt="Logo" className="h-8 md:h-10" />
+              {/* <img src={mainLogo} alt="Logo" className="h-8 md:h-10" /> */}
+              {logoHomeControl?.image ? (
+                <img
+                  className="h-8 md:h-10"
+                  src={`${import.meta.env.VITE_BASE_API_URL}${
+                    logoHomeControl?.image
+                  }`}
+                  alt="Logo"
+                />
+              ) : (
+                <div className="h-10"></div>
+              )}
             </Link>
           </div>
 

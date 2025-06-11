@@ -1,21 +1,32 @@
 import { Link } from "react-router";
 import { Link as ScrollLink } from "react-scroll";
-import mainLogo from "../../assets/Logos/logo_jili_us-en.png";
 import youtubeLogo from "../../assets/Logos/yt_icon (1).png";
 import LICENSESLogo1 from "../../assets/Logos/glc-logo-wb.png";
 import LICENSESLogo2 from "../../assets/Logos/bmm_testlabs.png";
+import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 
 const FooterLastPart = () => {
+  const { data: homeControls } = useGetHomeControlsQuery();
+
+  const logoHomeControl = homeControls?.find(
+    (control) => control.category === "logo" && control.isSelected === true
+  );
   return (
     <div className="bg-black text-white pb-8 px-4 md:max-w-4xl md:mx-16  2xl:mx-auto py-8 ">
       <div className="flex flex-col lg:flex-row justify-around  ">
         {/* Part 1 */}
         <div className="text-center lg:mb-0 mb-8 ">
-          <img
-            src={mainLogo}
-            alt="Logo"
-            className="w-16  md:w-20 mx-auto mb-2 md:mb-6"
-          />
+          {logoHomeControl?.image ? (
+            <img
+              className="w-16  md:w-20 mx-auto mb-2 md:mb-6"
+              src={`${import.meta.env.VITE_BASE_API_URL}${
+                logoHomeControl?.image
+              }`}
+              alt="Logo"
+            />
+          ) : (
+            <div className="h-10"></div>
+          )}
           <Link>
             <img
               src={youtubeLogo}

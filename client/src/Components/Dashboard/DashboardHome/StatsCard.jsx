@@ -1,12 +1,12 @@
-const StatsCard = ({ title, count, Icon, bgColor }) => (
+const StatsCard = ({ title, count, Icon, bgColor, titleColor, dataColor }) => (
   <div
     className={`flex items-center justify-between p-4 rounded-md shadow-md ${bgColor} text-white`}
   >
     <div>
-      <p className="text-2xl font-bold">{count}</p>
-      <h3 className="text-sm">{title}</h3>
+      <p className={`text-2xl font-bold ${dataColor}`}>{count}</p>
+      <h3 className={`text-lg ${titleColor}`}>{title}</h3>
     </div>
-    {Icon && <Icon className="text-6xl text-black opacity-15" />}{" "}
+    {Icon && <Icon className="text-6xl text-white opacity-15" />}{" "}
     {/* Render the icon dynamically */}
   </div>
 );

@@ -2,20 +2,17 @@ import { useNavigate } from "react-router";
 
 const ImageGridLarge = ({ images, setModalData }) => {
   const navigate = useNavigate();
-  // Pattern logic to determine how many items in each row
+
   const getRowIndex = (index) => {
     let count = 0;
     let rowIndex = 0;
-
     while (count <= index) {
-      count += rowIndex % 3 === 2 ? 4 : 3; // every 3rd row has 4 items, others have 3
+      count += rowIndex % 3 === 2 ? 4 : 3;
       rowIndex++;
     }
-
     return rowIndex - 1;
   };
 
-  // Count how many items came before the current row
   const getStartIndexOfRow = (rowIndex) => {
     let startIndex = 0;
     for (let i = 0; i < rowIndex; i++) {
@@ -24,10 +21,9 @@ const ImageGridLarge = ({ images, setModalData }) => {
     return startIndex;
   };
 
-  // Determine col-span class based on row pattern
   const getColSpanClass = (index) => {
     const rowIndex = getRowIndex(index);
-    const rowType = rowIndex % 3; // 0, 1, 2 → repeating pattern
+    const rowType = rowIndex % 3;
     const startIndex = getStartIndexOfRow(rowIndex);
     const positionInRow = index - startIndex;
 
@@ -50,13 +46,13 @@ const ImageGridLarge = ({ images, setModalData }) => {
           )}`}
         >
           <img
-            src={item.image}
+            src={item.src} // ✅ Changed from item.image to item.src
             alt={`game-${index}`}
-            className="w-full  h-96"
+            className="w-full h-96 object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white text-center px-2 pointer-events-none group-hover:pointer-events-auto">
             <h3 className="2xl:text-xl xl:text-lg lg:text-base uppercase font-bold mb-3">
-              {item.name}
+              {item.title} {/* ✅ Changed from item.name to item.title */}
             </h3>
             <button
               onClick={() => setModalData(item)}
@@ -64,13 +60,10 @@ const ImageGridLarge = ({ images, setModalData }) => {
             >
               Play Now
             </button>
-            {/* <button className="bg-black whitespace-nowrap w-[60%] text-lg font-semibold py-1 px-4 rounded-md">
-              Game Info
-            </button> */}
             <button
               onClick={() =>
-                navigate(`/game/${item.id}`, {
-                  state: { source: "tabImages" },
+                navigate(`/game/${item._id}`, {
+                  state: { source: "allHomeGames" }, // ✅ Clearer identifier
                 })
               }
               className="bg-black whitespace-nowrap w-[60%] text-lg font-semibold py-1 px-4 rounded-md"

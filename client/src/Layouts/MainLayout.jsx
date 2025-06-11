@@ -91,7 +91,8 @@ const MainLayout = () => {
         id: "popular1",
         name: "3 Coin Treasures",
         image: popularImage1,
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        videoUrl:
+          "https://lobby.qtlauncher.com/en-US/a3a2118d8c6b488ebc0fe7bfb07c46e4/categories/myQT?games=JTVCJTdCJTIyZ2FtZUlkJTIyJTNBJTIyRFMtcm9sbGlubW9uZXklMjIlMkMlMjJwbGF5VHlwZSUyMiUzQSUyMmxhdW5jaC5kZW1vJTIyJTdEJTJDbnVsbCUyQ251bGwlMkNudWxsJTVE&layout=layout_1",
         category: "Popular",
       },
       {
@@ -114,7 +115,8 @@ const MainLayout = () => {
         id: "slot1",
         name: "3 Coin Treasures 2",
         image: slotImage1,
-        videoUrl: "https://www.youtube.com/embed/ZZ5LpwO-An4",
+        videoUrl:
+          "https://lobby.qtlauncher.com/en-US/a3a2118d8c6b488ebc0fe7bfb07c46e4/categories/myQT?games=JTVCJTdCJTIyZ2FtZUlkJTIyJTNBJTIyRFMtcm9sbGlubW9uZXklMjIlMkMlMjJwbGF5VHlwZSUyMiUzQSUyMmxhdW5jaC5kZW1vJTIyJTdEJTJDbnVsbCUyQ251bGwlMkNudWxsJTVE&layout=layout_1",
         category: "Slot",
       },
       {

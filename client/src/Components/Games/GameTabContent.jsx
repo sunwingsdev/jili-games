@@ -1,32 +1,35 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
 import ImageGridSmall from "./ImageGridSmall";
 import ImageGridLarge from "./ImageGridLarge";
 import { useOutletContext } from "react-router";
+import { useGetAllHomeGamesQuery } from "../../redux/features/allApis/homeGamesApi/homeGamesApi";
 
 const GameTabContent = ({ activeKey }) => {
-  const { tabImages, setModalData } = useOutletContext();
+  const { setModalData } = useOutletContext();
+  const { data: allHomeGames = [] } = useGetAllHomeGamesQuery();
 
-  tabImages["All Games"] = [
-    ...tabImages.Popular,
-    ...tabImages.Slot,
-    ...tabImages.Fishing,
-    ...tabImages.TableAndCard,
-    ...tabImages.Bingo,
-    ...tabImages.Casino,
-  ];
-
-  const images = tabImages[activeKey] || [];
-
-  const [width, setWidth] = React.useState(
+  const [width, setWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const filteredGames =
+    activeKey === "All Games"
+      ? allHomeGames
+      : allHomeGames?.filter((game) => game.category === activeKey);
+
+  const images = filteredGames?.map((game) => ({
+    ...game,
+    src: `${import.meta.env.VITE_BASE_API_URL}${game.image}`,
+    title: game.name,
+    link: game.link,
+  }));
 
   return width < 768 ? (
     <ImageGridSmall images={images} setModalData={setModalData} />

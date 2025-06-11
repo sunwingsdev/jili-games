@@ -10,15 +10,14 @@ const GameModal = ({ modalData, onClose }) => {
   const [orientation, setOrientation] = useState("landscape");
 
   useEffect(() => {
-  // Disable scroll on modal open
-  document.body.style.overflow = "hidden";
+    // Disable scroll on modal open
+    document.body.style.overflow = "hidden";
 
-  return () => {
-    // Enable scroll again when modal closes
-    document.body.style.overflow = "auto";
-  };
-}, []);
-
+    return () => {
+      // Enable scroll again when modal closes
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   useEffect(() => {
     // Auto set orientation based on screen width
@@ -80,9 +79,9 @@ const GameModal = ({ modalData, onClose }) => {
           <div
             className={`flex justify-center items-center mx-auto transition-all duration-500 rounded overflow-hidden ${getVideoWrapperClass()}`}
           >
-            {modalData?.videoUrl && (
+            {modalData?.link && (
               <iframe
-                src={modalData.videoUrl}
+                src={modalData.link}
                 ref={videoRef}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
