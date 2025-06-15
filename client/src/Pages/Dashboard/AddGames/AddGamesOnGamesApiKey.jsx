@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import { useOutletContext } from "react-router";
+import { Link, useOutletContext } from "react-router";
 import { useGetAllCategoriesQuery } from "../../../redux/features/allApis/categoryApi/categoryApi";
 import {
   useAddGameMutation,
@@ -32,6 +32,9 @@ const AddGamesOnGamesApiKey = () => {
   const [loading, setLoading] = useState(false);
 
   const { data: allCategories } = useGetAllCategoriesQuery();
+  const filteredCategories = allCategories?.filter(
+    (cat) => cat.name !== "all games"
+  );
   const { data: allHomeGames } = useGetAllHomeGamesQuery();
   console.log(allHomeGames);
   const { data: allSubCategories } = useGetAllSubCategoriesQuery();
@@ -41,18 +44,18 @@ const AddGamesOnGamesApiKey = () => {
   const [uploadImage] = useUploadImageMutation();
   const [addGame] = useAddGameMutation();
 
-  const handleEdit = (game) => {
-    setGameId(game._id);
-    setGameName(game.name);
-    setGameLink(game.link);
-    setGameDemoLink(game.demoLink);
-    setSelectedCategory(game.category);
-    setSelectedSubCategory(game.subCategory);
-    setGameApi(game.gameApi);
-    setImagePreview(`${import.meta.env.VITE_BASE_API_URL}${game.image}`);
-    setIsEditMode(true);
-    setIsModalOpen(true);
-  };
+  // const handleEdit = (game) => {
+  //   setGameId(game._id);
+  //   setGameName(game.name);
+  //   setGameLink(game.link);
+  //   setGameDemoLink(game.demoLink);
+  //   setSelectedCategory(game.category);
+  //   setSelectedSubCategory(game.subCategory);
+  //   setGameApi(game.gameApi);
+  //   setImagePreview(`${import.meta.env.VITE_BASE_API_URL}${game.image}`);
+  //   setIsEditMode(true);
+  //   setIsModalOpen(true);
+  // };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -158,18 +161,17 @@ const AddGamesOnGamesApiKey = () => {
     <div>
       <div className="bg-[#172437] py-4 px-2 flex items-center justify-between">
         <h1 className="text-white text-3xl font-bold">Add Games</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-yellow-400 text-black px-4 py-1 text-xl"
-        >
-          Add+
-        </button>
+        <Link to="/dashboard/createnewgame">
+          <button className="bg-yellow-400 text-black px-4 py-1 text-xl">
+            Add+
+          </button>
+        </Link>
       </div>
       <div className="mt-6">
         <Tabs>
           {/* Main Category Tabs */}
           <TabList className="flex gap-4 border-b border-gray-300 overflow-x-auto scrollbar-hide px-2 md:px-0 mb-4">
-            {allCategories?.map((category, i) => (
+            {filteredCategories?.map((category, i) => (
               <Tab
                 key={i}
                 className="px-4 py-2 text-base md:text-lg font-semibold text-gray-600 hover:text-gray-900 border-b-2 border-transparent transition-all duration-300 ease-in-out focus:outline-none data-[selected]:border-blue-500 data-[selected]:text-blue-500 whitespace-nowrap cursor-pointer"
@@ -179,13 +181,14 @@ const AddGamesOnGamesApiKey = () => {
             ))}
           </TabList>
 
-          {allCategories?.map((category, i) => (
+          {/* Show games by each category */}
+          {filteredCategories?.map((category, i) => (
             <TabPanel key={i}>
-              {category.name === "এক্সক্লুসিভ" ? (
-                // এক্সক্লুসিভ ক্যাটাগরির জন্য সরাসরি গেম দেখাবে
-                <div className="grid grid-cols-5 gap-4 mt-4">
-                  {allHomeGames
-                    ?.filter((game) => game.category === category.name)
+              <div className="grid grid-cols-5 gap-4 mt-4">
+                {allHomeGames?.filter((game) => game.category === category.name)
+                  .length > 0 ? (
+                  allHomeGames
+                    .filter((game) => game.category === category.name)
                     .map((game) => (
                       <div
                         key={game._id}
@@ -199,12 +202,11 @@ const AddGamesOnGamesApiKey = () => {
                           className="w-full h-full object-cover rounded-md"
                         />
                         <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <button
-                            className="bg-blue-500 text-white p-2 rounded-full mr-2"
-                            onClick={() => handleEdit(game)}
-                          >
-                            Edit
-                          </button>
+                          <Link to={`/dashboard/updategame/${game?._id}`}>
+                            <button className="bg-blue-500 text-white p-2 rounded-full mr-2">
+                              Edit
+                            </button>
+                          </Link>
                           <button
                             className="bg-red-500 text-white p-2 rounded-full"
                             onClick={() => handleDelete(game._id)}
@@ -213,86 +215,13 @@ const AddGamesOnGamesApiKey = () => {
                           </button>
                         </div>
                       </div>
-                    ))}
-                </div>
-              ) : // অন্যান্য ক্যাটাগরির জন্য সাব-ক্যাটাগরি অনুযায়ী ট্যাব দেখাবে
-              allSubCategories?.filter(
-                  (subCategory) => subCategory.category === category.name
-                ).length > 0 ? (
-                <Tabs>
-                  <TabList className="flex gap-4 border-b border-gray-300 overflow-x-auto scrollbar-hide px-2 md:px-0">
-                    {allSubCategories
-                      ?.filter(
-                        (subCategory) => subCategory.category === category.name
-                      )
-                      .map((subCategory, j) => (
-                        <Tab
-                          key={j}
-                          className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 border-b-2 border-transparent transition-all duration-300 ease-in-out focus:outline-none data-[selected]:border-blue-500 data-[selected]:text-blue-500 whitespace-nowrap cursor-pointer"
-                        >
-                          {subCategory.name}
-                        </Tab>
-                      ))}
-                  </TabList>
-
-                  {allSubCategories
-                    ?.filter(
-                      (subCategory) => subCategory.category === category.name
-                    )
-                    .map((subCategory, j) => (
-                      <TabPanel key={j}>
-                        <div className="grid grid-cols-5 gap-4 mt-4">
-                          {allHomeGames?.filter(
-                            (game) =>
-                              game.category === category.name &&
-                              game.subCategory === subCategory.name
-                          ).length > 0 ? (
-                            allHomeGames
-                              ?.filter(
-                                (game) =>
-                                  game.category === category.name &&
-                                  game.subCategory === subCategory.name
-                              )
-                              .map((game) => (
-                                <div
-                                  key={game._id}
-                                  className="relative group border rounded-md shadow-md bg-white"
-                                >
-                                  <img
-                                    src={`${import.meta.env.VITE_BASE_API_URL}${
-                                      game.image
-                                    }`}
-                                    alt={game.name}
-                                    className="w-full h-full object-cover rounded-md"
-                                  />
-                                  <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                    <button
-                                      className="bg-blue-500 text-white p-2 rounded-full mr-2"
-                                      onClick={() => handleEdit(game)}
-                                    >
-                                      Edit
-                                    </button>
-                                    <button
-                                      className="bg-red-500 text-white p-2 rounded-full"
-                                      onClick={() => handleDelete(game._id)}
-                                    >
-                                      Delete
-                                    </button>
-                                  </div>
-                                </div>
-                              ))
-                          ) : (
-                            <p className="text-gray-500 text-sm font-semibold col-span-5">
-                              No games available
-                            </p>
-                          )}
-                        </div>
-                      </TabPanel>
-                    ))}
-                </Tabs>
-              ) : (
-                <h2>No subcategories available</h2>
-              )}
+                    ))
+                ) : (
+                  <p className="text-gray-500 text-sm font-semibold col-span-5">
+                    No games available
+                  </p>
+                )}
+              </div>
             </TabPanel>
           ))}
         </Tabs>
