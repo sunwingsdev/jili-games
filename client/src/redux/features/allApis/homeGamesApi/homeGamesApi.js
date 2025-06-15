@@ -16,6 +16,11 @@ const homeGamesApi = baseApi.injectEndpoints({
       providesTags: ["homeGame"],
     }),
 
+    getHomeGameById: builder.query({
+      query: (id) => `/homegames/${id}`,
+      providesTags: ["homeGame"],
+    }),
+
     updateHomeGame: builder.mutation({
       query: ({ id, data }) => ({
         url: `/homegames/${id}`,
@@ -37,6 +42,7 @@ const homeGamesApi = baseApi.injectEndpoints({
 export const {
   useAddGameMutation,
   useGetAllHomeGamesQuery,
+  useGetHomeGameByIdQuery,
   useUpdateHomeGameMutation,
   useDeleteHomeGameMutation,
 } = homeGamesApi;

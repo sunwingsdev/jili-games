@@ -1,57 +1,35 @@
-import { useParams, useLocation, useOutletContext } from "react-router";
 import { useState } from "react";
-
+import { useParams, useOutletContext } from "react-router";
 import chillImage from "../assets/Images/chill.png";
 import pcImage from "../assets/Images/pc.png";
 import tabletImage from "../assets/Images/tablet.png";
 import rotateImage from "../assets/Images/phone_horizon.png";
-import image1 from "../assets/Images/flag_ENG.png";
-import image2 from "../assets/Images/flag_CN.png";
-import image3 from "../assets/Images/flag_THAI.png";
-
-import featureImage1 from "../assets/Images/r5yOJ6JmPK54rJngTVnmgw9VEwdGiI1qbFczYhpi.png";
-import featureImage2 from "../assets/Images/75ds61PdELcDAiLyBJWA0UJzM2vAYNdKeUDLVkE3.png";
-import featureImage3 from "../assets/Images/kUKHyX6AOh3Q1B2d9lWgXDc5inP5aVNqm9QRgyuv.png";
-import featureImage4 from "../assets/Images/B6j2mNWxNftUEnUQuRaleUeVpaLjvEP0mUyeqwu5.png";
-import featureImage5 from "../assets/Images/yGii1X3PxDXTSzql5C323VZkZtFTZwX2guJ4868F.png";
+import { useGetHomeGameByIdQuery } from "../redux/features/allApis/homeGamesApi/homeGamesApi";
 
 const GameInfo = () => {
   const { id } = useParams();
-  const location = useLocation();
-  const { images, tabImages, setModalData } = useOutletContext();
+  const { data: singleGame } = useGetHomeGameByIdQuery(id);
 
-  const source = location.state?.source || "images";
+  console.log(singleGame);
 
-  let game;
-
-  if (source === "tabImages") {
-    const allTabGames = Object.values(tabImages).flat();
-    game = allTabGames.find((item) => item.id === id);
-  } else {
-    game = images.find((item) => item.id === id);
-  }
+  const { setModalData } = useOutletContext();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  if (!game) return <p className="text-center text-white">Game not found</p>;
+  if (!singleGame)
+    return <p className="text-center text-white">Game not found</p>;
 
-  // Dummy data for illustration (can replace with props/context if needed)
   const extraImages = [pcImage, tabletImage, rotateImage];
-  const specialFeatures = [
-    "3x3 grid with fast-paced gameplay",
-    "5 paylines for easy wins",
-    "Fortune Coin symbol triggers prize collection & Lock & Respin",
-    "Jackpot prizes up to 1000x Grand reward",
-    "Bonus Game offers unlimited prize accumulation!",
-  ];
-  const supportedLanguages = [image1, image2, image3, image2, image1, image3];
-  const carouselImages = [
-    featureImage1,
-    featureImage2,
-    featureImage3,
-    featureImage4,
-    featureImage5,
-  ];
+
+  const carouselImages =
+    singleGame?.gameFeatureImages?.map(
+      (imgPath) => `${import.meta.env.VITE_BASE_API_URL}${imgPath}`
+    ) || [];
+
+  const convertToEmbedURL = (url) => {
+    const match = url.match(/(?:\?v=|\/embed\/|\.be\/)([a-zA-Z0-9_-]{11})/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : "";
+  };
 
   return (
     <div className=" pt-20  text-white">
@@ -60,18 +38,18 @@ const GameInfo = () => {
         <div className=" ">
           <div className="flex justify-center">
             <img
-              src={game.image}
-              alt={game.name}
+              src={`${import.meta.env.VITE_BASE_API_URL}${singleGame?.image}`}
+              alt={singleGame?.name}
               className="lg:w-full w-[80%] md:w-[30%] rounded-lg mb-4"
             />
           </div>
           <div className="flex flex-col items-center gap-4 lg:flex-row justify-center">
             <h1 className="text-3xl  lg:hidden font-bold text-white">
-              {game.name}
+              {singleGame?.name}
             </h1>
             <button
               className="lg:w-[60%] w-[60%] md:w-[20%] bg-bgYellow py-3 rounded-xl text-black text-lg font-medium mb-4  hover:bg-opacity-80"
-              onClick={() => setModalData(game)}
+              onClick={() => setModalData(singleGame)}
             >
               Play Now
             </button>
@@ -86,17 +64,21 @@ const GameInfo = () => {
         {/* Right Side */}
         <div className="flex-1 space-y-4">
           <h1 className="text-4xl hidden lg:block font-bold text-white">
-            {game.name}
+            {singleGame?.name}
           </h1>
           <div className="lg:flex  gap-4 space-y-4 lg:space-y-0 ">
             <div className="border border-white border-opacity-30 px-2 py-4 bg-bgGameTab rounded lg:w-full w-[80%] mx-auto  text-center">
               <p className="text-sm ">MAX WIN</p>
-              <p className="text-xl text-textYellow font-bold">3000X</p>
+              <p className="text-xl text-textYellow font-bold">
+                {singleGame?.maxWin}X
+              </p>
             </div>
             <div className="border border-white border-opacity-30 px-2 py-4 bg-bgGameTab rounded lg:w-full w-[80%] text-center mx-auto">
               <p className="text-sm ">VOLATILITY</p>
               <div className="flex gap-1 justify-center items-center">
-                <p className="text-xl text-textYellow font-bold">LOW-MED</p>
+                <p className="text-xl text-textYellow font-bold">
+                  {singleGame?.volatility}
+                </p>
                 <img src={chillImage} alt="" />
                 <img src={chillImage} alt="" />
               </div>
@@ -108,7 +90,7 @@ const GameInfo = () => {
               Type of Game
             </p>
             <p className="font-semibold text-left w-full ">
-              {game.category || "N/A"}
+              {singleGame?.category || "N/A"}
             </p>
           </div>
 
@@ -117,7 +99,7 @@ const GameInfo = () => {
               Special Features
             </p>
             <ul className="list-disc list-inside text-left w-full">
-              {specialFeatures.map((feature, idx) => (
+              {singleGame?.features?.map((feature, idx) => (
                 <li key={idx}>{feature}</li>
               ))}
             </ul>
@@ -127,20 +109,24 @@ const GameInfo = () => {
             <p className="text-textYellow font-bold  w-full  whitespace-nowrap   md:w-[30%]">
               Paylines
             </p>
-            <p className="font-semibold w-full text-left">5 lines</p>
+            <p className="font-semibold w-full text-left">
+              {singleGame?.paylines || "0"} lines
+            </p>
           </div>
 
           <div className="border-b py-2 flex gap-12">
             <p className="text-textYellow font-bold  w-full  whitespace-nowrap   md:w-[30%]">
               Publish Time
             </p>
-            <p className="font-semibold w-full text-left">2025.03</p>
+            <p className="font-semibold w-full text-left">
+              {singleGame?.publishTime || "N/A"}
+            </p>
           </div>
 
           <div className=" py-4 text-center rounded-md bg-[#F0E4DF59] space-y-2">
             <p className="text-white font-semibold ">Supported Languages</p>
             <div className="flex flex-wrap justify-center gap-2">
-              {supportedLanguages.map((img, idx) => (
+              {singleGame?.languages?.map((img, idx) => (
                 <img
                   key={idx}
                   src={img}
@@ -152,6 +138,19 @@ const GameInfo = () => {
           </div>
         </div>
       </div>
+      {singleGame?.gameTrailerLink?.trim() && (
+        <div className="flex items-center justify-center my-16">
+          <iframe
+            width="50%"
+            height="515"
+            src={convertToEmbedURL(singleGame.gameTrailerLink)}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
 
       {/* Carousel section */}
       <div className="bg-[#4F557759] mt-10 py-32  p-6 rounded-lg">
@@ -179,9 +178,7 @@ const GameInfo = () => {
         <div className="max-w-6xl mx-auto mt-8">
           <h3 className="text-textYellow text-3xl">DESCRIPTION</h3>
           <p className=" text-xl mt-2 text-[#C6BDBD]">
-            Enter the royal palace and spin Fortune Coins for up to 1000x wins!
-            Collect coin symbols, trigger Lock & Respin or Bonus Game, and watch
-            your fortune grow! Join now for luxury and rewards!
+            {singleGame?.description}
           </p>
         </div>
       </div>

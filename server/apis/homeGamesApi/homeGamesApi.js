@@ -18,6 +18,25 @@ const homeGamesApi = (homeGamesCollection) => {
     res.send(result);
   });
 
+  // Get a single game by id
+  router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const game = await homeGamesCollection.findOne({ _id: new ObjectId(id) });
+      if (!game) {
+        return res
+          .status(404)
+          .send({ success: false, message: "Game not found" });
+      }
+      res.send(game);
+    } catch (error) {
+      console.error("Error fetching game:", error);
+      res
+        .status(500)
+        .send({ success: false, message: "Invalid ID or server error" });
+    }
+  });
+
   // Update a game
   router.put("/:id", async (req, res) => {
     const { id } = req.params;

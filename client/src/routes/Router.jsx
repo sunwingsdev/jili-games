@@ -32,6 +32,8 @@ import AgentProfile from "../Pages/Dashboard/AgentProfile/AgentProfile";
 import UserDetailsPage from "../Pages/Dashboard/UserDetailsPage/UserDetailsPage";
 import AdminRoute from "./AdminRoute";
 import AdminLogin from "../Pages/AdminLogin/AdminLogin";
+import CreateNewGame from "../Pages/Dashboard/AddGames/CreateNewGame";
+import UpdateGame from "../Pages/Dashboard/AddGames/UpdateGame";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,8 @@ const router = createBrowserRouter([
       { path: "user-profile/:id", element: <UserDetailsPage /> },
       { path: "gameCategories", element: <GameCategories /> },
       { path: "addGames", element: <AddGamesOnGamesApiKey /> },
+      { path: "createnewgame", element: <CreateNewGame /> },
+      { path: "updategame/:id", element: <UpdateGame /> },
       { path: "gamesApi/:id", element: <GamesApi /> },
       { path: "home-controls", element: <HomeControl /> },
       { path: "promotion-offer", element: <PromotionOffer /> },

@@ -11,20 +11,29 @@ const GameTabs = () => {
   const tabRefs = useRef({});
   const tabBarRef = useRef(null);
 
+  // ✅ Default active tab from categories (first one)
   useEffect(() => {
     if (allCategories?.length > 0 && !activeKey) {
       setActiveKey(allCategories[0].name);
     }
   }, [allCategories, activeKey]);
 
-  // ✅ Sets the active tab based on route state (if scrollToId is provided)
+  // ✅ Handle query parameter ?category=casino
   useEffect(() => {
-    const scrollToId = location.state?.scrollToId;
-    const matched = allCategories?.find((tab) => tab.id === scrollToId);
-    if (matched) setActiveKey(matched.name);
-  }, [location.state, allCategories]);
+    const searchParams = new URLSearchParams(location.search);
+    const categoryParam = searchParams.get("category");
 
-  // ✅ Scrolls the page to the content section corresponding to scrollToId
+    if (categoryParam && allCategories?.length > 0) {
+      const matched = allCategories.find(
+        (tab) => tab.name.toLowerCase().replace(/\s+/g, "-") === categoryParam
+      );
+      if (matched) {
+        setActiveKey(matched.name);
+      }
+    }
+  }, [location.search, allCategories]);
+
+  // ✅ Scroll to element if scrollToId exists in route state
   useEffect(() => {
     const scrollToId = location.state?.scrollToId;
     const el = scrollToId && document.getElementById(scrollToId);
@@ -38,7 +47,7 @@ const GameTabs = () => {
     }
   }, [location]);
 
-  // ✅ Scrolls the tab bar to bring the active tab into horizontal center view specially in phone screen, where tabs are in overflow-x-auto
+  // ✅ Scroll tab bar to center active tab (for mobile horizontal scrolling)
   useEffect(() => {
     const tabEl = tabRefs.current[activeKey];
     const container = tabBarRef.current;
@@ -52,7 +61,7 @@ const GameTabs = () => {
 
   return (
     <div className="-mt-16">
-      {/* Sticky Tab Bar */}
+      {/* Tab Bar */}
       <div
         ref={tabBarRef}
         className="flex sticky top-14 md:top-16 bg-black bg-opacity-80 backdrop-blur-md z-10 flex-row justify-start md:justify-center items-center gap-x-4 overflow-x-auto shadow-md md:px-4 lg:px-8 pl-4 scroll-smooth"
@@ -63,7 +72,7 @@ const GameTabs = () => {
             <div
               key={_id}
               id={_id}
-              ref={(el) => (tabRefs.current[_id] = el)}
+              ref={(el) => (tabRefs.current[name] = el)}
               onClick={() => setActiveKey(name)}
               className={`flex flex-col items-center cursor-pointer relative transition-all duration-200 py-1 md:py-1 md:px-4 md:w-[88px] lg:w-full group
                 ${
@@ -83,15 +92,15 @@ const GameTabs = () => {
                     isActive ? "bg-black" : "group-hover:bg-black"
                   }`}
                   style={{
-                    WebkitMaskImage: `url(${`${
+                    WebkitMaskImage: `url(${
                       import.meta.env.VITE_BASE_API_URL
-                    }${image}`})`,
+                    }${image})`,
                     WebkitMaskRepeat: "no-repeat",
                     WebkitMaskSize: "contain",
                     WebkitMaskPosition: "center",
-                    maskImage: `url(${`${
+                    maskImage: `url(${
                       import.meta.env.VITE_BASE_API_URL
-                    }${image}`})`,
+                    }${image})`,
                     maskRepeat: "no-repeat",
                     maskSize: "contain",
                     maskPosition: "center",
@@ -110,7 +119,7 @@ const GameTabs = () => {
         })}
       </div>
 
-      {/* Tab Header and Search */}
+      {/* Header and Search */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 px-4 md:px-6 lg:px-8 mt-4">
         <h2 className="text-textYellow text-2xl md:text-4xl lg:text-5xl uppercase font-bold">
           {allCategories?.find((item) => item?.name === activeKey)?.name}
