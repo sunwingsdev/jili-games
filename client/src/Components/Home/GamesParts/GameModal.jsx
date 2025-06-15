@@ -83,7 +83,12 @@ const GameModal = ({ modalData, onClose }) => {
               <iframe
                 src={modalData.link}
                 ref={videoRef}
-                className="w-full h-full"
+                className="w-full"
+                style={{
+                  height: "calc(100% + 48px)",
+                  transform: "translateY(-48px)",
+                  border: "none",
+                }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Game Video"
