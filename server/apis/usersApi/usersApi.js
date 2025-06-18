@@ -44,7 +44,7 @@ const usersApi = (
     // }
     try {
       const existingUser = await usersCollection.findOne({
-        username: userInfo?.username,
+        email: userInfo?.email,
       });
       if (existingUser)
         return res.status(400).json({ error: "User already exists" });
@@ -60,16 +60,14 @@ const usersApi = (
 
   // Login a user and validate JWT issuance
   router.post("/login", async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ error: "Username and password are required" });
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
     }
 
     try {
-      const user = await usersCollection.findOne({ username });
+      const user = await usersCollection.findOne({ email });
       if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -78,13 +76,13 @@ const usersApi = (
 
       // Generate JWT token
       const token = jwt.sign(
-        { userId: user._id, username: user.username },
+        { userId: user._id, email: user.email },
         jwtSecret,
         { expiresIn: "7d" }
       );
 
       await usersCollection.updateOne(
-        { username },
+        { email },
         { $set: { lastLoginAt: new Date() } },
         { upsert: true }
       );

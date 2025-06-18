@@ -44,6 +44,26 @@ const homeControlApi = (homeControlCollection) => {
           { _id: new ObjectId(id) },
           { $set: { isSelected: true } }
         );
+      } else if (category === "other") {
+        // Set isSelected true for the selected ID and false for other images
+        await homeControlCollection.updateMany(
+          { category: "other" },
+          { $set: { isSelected: false } }
+        );
+        await homeControlCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isSelected: true } }
+        );
+      } else if (category === "other1") {
+        // Set isSelected true for the selected ID and false for other images
+        await homeControlCollection.updateMany(
+          { category: "other1" },
+          { $set: { isSelected: false } }
+        );
+        await homeControlCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isSelected: true } }
+        );
       } else if (category === "slider") {
         // Toggle isSelected for the selected ID only
         await homeControlCollection.updateOne(
