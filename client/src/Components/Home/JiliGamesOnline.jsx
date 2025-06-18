@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import exampleImage from "../../assets/Images/aboutus.png"; // তুমি তোমার ইমেজ পাথ এডজাস্ট করো
+import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 
 const JiliGamesOnline = () => {
   const stats = [
@@ -8,13 +8,22 @@ const JiliGamesOnline = () => {
     { number: "50+", label: "CURRENCIES SUPPORTED" },
     { number: "12+", label: "LANGUAGES SUPPORTED" },
   ];
+
+  const { data: homeControls } = useGetHomeControlsQuery();
+
+  const jiliGamesImage = homeControls?.find(
+    (control) =>
+      control.category === "other1" &&
+      control.version === "jili games" &&
+      control.isSelected === true
+  );
   return (
     <div className="pt-8" id="company">
       <div className="flex flex-col-reverse lg:flex-row items-center md:items-stretch gap-6 md:gap-12 p-6 xl:px-0 lg:px-4 md:px-4 max-w-7xl mx-auto">
         {/* Left Image */}
         <div className="lg:flex-1 md:h-auto h-64 lg:h-auto w-full lg:w-auto">
           <img
-            src={exampleImage}
+            src={`${import.meta.env.VITE_BASE_API_URL}${jiliGamesImage?.image}`}
             alt="JILI Games"
             className="object-cover h-full w-full rounded-lg shadow-lg"
           />

@@ -1,10 +1,18 @@
 import { Link } from "react-router";
-import image from "../../assets/Images/ourgame_top.png";
 import { useGetAllCategoriesQuery } from "../../redux/features/allApis/categoryApi/categoryApi";
+import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 
 const OurGames = () => {
   const { data: allCategories } = useGetAllCategoriesQuery();
-  console.log("all", allCategories);
+
+  const { data: homeControls } = useGetHomeControlsQuery();
+
+  const ourGamesImage = homeControls?.find(
+    (control) =>
+      control.category === "other" &&
+      control.version === "our games" &&
+      control.isSelected === true
+  );
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -15,7 +23,7 @@ const OurGames = () => {
 
       {/* Image */}
       <img
-        src={image}
+        src={`${import.meta.env.VITE_BASE_API_URL}${ourGamesImage?.image}`}
         alt="Our Games"
         className="mx-auto rounded-lg shadow-lg w-[80%]"
       />

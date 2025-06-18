@@ -2,7 +2,7 @@ import { Outlet, useNavigation } from "react-router";
 import Header from "../Components/Header/Header";
 import Footer from "../Components/Footer/Footer";
 import ScrollToTop from "../Components/Common/ScrollToTop";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import GameModal from "../Components/Home/GamesParts/GameModal";
 import image1 from "../assets/Images/DtP4ZtTTSFMSTUxfRBlChuvPSaZ7F6AUlyCPF9HQ.png";
 import image2 from "../assets/Images/j1Wsrf65POcVebSWX2lFMmGgonc1uvrB6pEtGX5q.png";
@@ -35,8 +35,17 @@ import casinoImage1 from "../assets/tabImages/rjFusGL5veaYfxqZVPyMFn5CTy6Mx1utbS
 import casinoImage2 from "../assets/tabImages/JzxGm7hWKwjorfl4rETZZYycV40zRBwy1GukE55o.png";
 import casinoImage3 from "../assets/tabImages/yDKwOvjqDSJfyGly7t0xh9V0oWXk98FLnLYDcz5i.png";
 import Loader from "../Components/Loader/Loader";
+import LoginModal from "../Components/Shared/LoginModal ";
+import { ModalContext } from "../providers/ModalProvider";
+import RegisterModal from "../Components/Shared/RegisterModal";
 
 const MainLayout = () => {
+  const {
+    isLoginModalOpen,
+    setIsLoginModalOpen,
+    isRegisterModalOpen,
+    setIsRegisterModalOpen,
+  } = useContext(ModalContext);
   const navigation = useNavigation();
 
   const [modalData, setModalData] = useState(null);
@@ -255,6 +264,28 @@ const MainLayout = () => {
       {/* Modal */}
       {modalData && (
         <GameModal modalData={modalData} onClose={() => setModalData(null)} />
+      )}
+
+      {isLoginModalOpen && (
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+          onSwitchToRegister={() => {
+            setIsLoginModalOpen(false);
+            setIsRegisterModalOpen(true);
+          }}
+        />
+      )}
+
+      {isRegisterModalOpen && (
+        <RegisterModal
+          isOpen={isRegisterModalOpen}
+          onClose={() => setIsRegisterModalOpen(false)}
+          onSwitchToSignIn={() => {
+            setIsRegisterModalOpen(false);
+            setIsLoginModalOpen(true);
+          }}
+        />
       )}
     </>
   );

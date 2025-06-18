@@ -34,6 +34,7 @@ import AdminRoute from "./AdminRoute";
 import AdminLogin from "../Pages/AdminLogin/AdminLogin";
 import CreateNewGame from "../Pages/Dashboard/AddGames/CreateNewGame";
 import UpdateGame from "../Pages/Dashboard/AddGames/UpdateGame";
+import UserContacts from "../Pages/Dashboard/UserContacts/UserContacts";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
       { path: "agentprofile/:id", element: <AgentProfile /> },
       { path: "affiliators", element: <Affiliators /> },
       { path: "allaffiliatelinks", element: <AllAffiliateLinks /> },
+      { path: "usercontacts", element: <UserContacts /> },
       { path: "user-profile/:id", element: <UserDetailsPage /> },
       { path: "gameCategories", element: <GameCategories /> },
       { path: "addGames", element: <AddGamesOnGamesApiKey /> },

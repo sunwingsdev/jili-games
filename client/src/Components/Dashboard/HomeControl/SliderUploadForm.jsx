@@ -6,7 +6,7 @@ import { useAddHomeControlMutation } from "../../../redux/features/allApis/homeC
 import { Button } from "../../ui/button";
 import SpinLoader from "../../Shared/Loader/SpinLoader";
 
-const SliderUploadForm = ({ closeModal }) => {
+const SliderUploadForm = ({ closeModal, version, category }) => {
   const [uploadImage] = useUploadImageMutation();
   const [addHomeControl] = useAddHomeControlMutation();
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,8 @@ const SliderUploadForm = ({ closeModal }) => {
           const logoInfo = {
             page: "home",
             section: "banner",
-            category: "slider",
+            category: category,
+            version: version,
             image: data?.filePath,
           };
           const result = await addHomeControl(logoInfo);
@@ -52,7 +53,7 @@ const SliderUploadForm = ({ closeModal }) => {
         }
       } catch (error) {
         setLoading(false);
-        toast.error("Failed to upload logo");
+        toast.error("Failed to upload slider");
       }
     } else {
       setLoading(false);
