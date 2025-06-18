@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { Link as ScrollLink } from "react-scroll";
 import { FiMenu, FiX } from "react-icons/fi";
-import languageImage from "../../assets/Logos/world_white.svg";
 import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
+import { ModalContext } from "../../providers/ModalProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/slices/authSlice";
+import toast from "react-hot-toast";
 
 const Header = () => {
+  const { user } = useSelector((state) => state.auth);
+  console.log("user", user);
+  const dispatch = useDispatch();
+  const { setIsLoginModalOpen, setIsRegisterModalOpen } =
+    useContext(ModalContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: homeControls } = useGetHomeControlsQuery();
 
@@ -20,6 +28,12 @@ const Header = () => {
 
   // Check active path
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+    toast.success("Logout successful");
+  };
 
   return (
     <>
@@ -79,11 +93,40 @@ const Header = () => {
             >
               Contact Us
             </ScrollLink>
+            {user && user.role === "user" ? (
+              <>
+                <Link
+                  to="/user-dashboard"
+                  className={`hover:text-textYellow transition ${
+                    isActive("/user-dashboard") ? "text-textYellow" : ""
+                  }`}
+                >
+                  Dashboard
+                </Link>
 
-            {/* Language Dropdown */}
-            <div className="">
-              <img src={languageImage} alt="" className="h-7 w-7 " />
-            </div>
+                <button
+                  onClick={handleLogout}
+                  className="text-white border border-textYellow px-3 rounded-full"
+                >
+                  Log Out
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="text-white border border-textYellow px-3 rounded-full"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => setIsRegisterModalOpen(true)}
+                  className="text-white border border-textYellow px-3 rounded-full"
+                >
+                  Register
+                </button>
+              </>
+            )}
           </nav>
 
           {/* Mobile Menu */}
@@ -103,9 +146,36 @@ const Header = () => {
               </button>
               
             </div> */}
-            <div className="">
+            {/* <div className="">
               <img src={languageImage} alt="" className="h-7 w-7 " />
-            </div>
+            </div> */}
+            {user && user.role === "user" ? (
+              <>
+                <Link
+                  to="/user-dashboard"
+                  className={`text-white hover:text-textYellow transition border border-textYellow px-3 rounded-full ${
+                    isActive("/user-dashboard") ? "text-textYellow" : ""
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="text-white border border-textYellow px-3 rounded-full"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => setIsRegisterModalOpen(true)}
+                  className="text-white border border-textYellow px-3 rounded-full"
+                >
+                  Register
+                </button>
+              </>
+            )}
 
             {/* Menu Icon */}
             <button
@@ -163,6 +233,15 @@ const Header = () => {
           >
             Contact Us
           </ScrollLink>
+
+          {user && (
+            <button
+              onClick={handleLogout}
+              className="text-white border border-textYellow px-3 rounded-full"
+            >
+              Log Out
+            </button>
+          )}
         </nav>
       </div>
     </>

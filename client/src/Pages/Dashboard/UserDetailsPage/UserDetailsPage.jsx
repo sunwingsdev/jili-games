@@ -99,8 +99,6 @@ const UserDetailsPage = () => {
     );
   }
 
-  console.log(singleUser);
-
   const totalTransactions =
     (userDeposits?.length || 0) + (userWithdraws?.length || 0);
 

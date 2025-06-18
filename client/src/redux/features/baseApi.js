@@ -30,6 +30,7 @@ const baseApi = createApi({
     "withdrawMethod",
     "refercodes",
     "commission",
+    "userContact",
   ],
   endpoints: () => ({}),
 });

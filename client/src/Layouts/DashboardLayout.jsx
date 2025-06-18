@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BsBank, BsFront, BsPiggyBank, BsShop } from "react-icons/bs";
 import { FaAffiliatetheme, FaUsers } from "react-icons/fa";
 import { GiGamepadCross, GiRibbonMedal } from "react-icons/gi";
-import { IoMdHome } from "react-icons/io";
+import { IoIosContacts, IoMdHome } from "react-icons/io";
 import {
   IoGameController,
   IoLogoWechat,
@@ -46,6 +46,11 @@ const DashboardLayout = () => {
         { label: "All Affiliates", to: "/dashboard/affiliators" },
         { label: "All Affiliate Links", to: "/dashboard/allaffiliatelinks" },
       ],
+    },
+    {
+      label: "User Contacts",
+      icon: <IoIosContacts />,
+      to: "/dashboard/usercontacts",
     },
     {
       label: "Games Control",
