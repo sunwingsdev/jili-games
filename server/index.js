@@ -26,6 +26,7 @@ const withdrawMethodApi = require("./apis/paymentMethodApi/withdrawMethodApi");
 const referCodeApi = require("./apis/referCodeApi/referCodeApi");
 const commissionApi = require("./apis/commissionApi/commissionApi");
 const userContactsApi = require("./apis/userContactsApi/userContactsApi");
+const packagesApi = require("./apis/packagesApi/packagesApi");
 
 const port = process.env.PORT || 5000;
 
@@ -164,6 +165,7 @@ async function run() {
     const commissionsCollection = database.collection("commissions");
     const balanceHistoryCollection = database.collection("balance-histories");
     const userContactsCollection = database.collection("user-contacts");
+    const packagesCollection = database.collection("packages");
 
     // API routes
     app.use(
@@ -201,6 +203,7 @@ async function run() {
     app.use("/refer-links", referCodeApi(referCodesCollection));
     app.use("/commissions", commissionApi(commissionsCollection));
     app.use("/user-contacts", userContactsApi(userContactsCollection));
+    app.use("/packages", packagesApi(packagesCollection));
 
     await client.db("admin").command({ ping: 1 });
     console.log("Connected to MongoDB!!!✅");

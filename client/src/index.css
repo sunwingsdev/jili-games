@@ -65,9 +65,7 @@
   border-radius: 0.5rem; /* optional */
 }
 
-
 .flip-card-back {
-  
   transform: rotateY(180deg);
   display: flex;
   align-items: center;
@@ -75,3 +73,14 @@
   padding: 1rem;
 }
 
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-contacts-auto-fill-button {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
