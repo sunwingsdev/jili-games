@@ -17,11 +17,11 @@ const AllUsers = () => {
     ?.filter((user) => user.role === "user")
     ?.filter(
       (user) =>
-        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.username?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
         (user.phone &&
-          user.phone.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          user.phone?.toLowerCase().includes(searchQuery?.toLowerCase())) ||
         (user.email &&
-          user.email.toLowerCase().includes(searchQuery.toLowerCase()))
+          user.email?.toLowerCase().includes(searchQuery?.toLowerCase()))
     )
     ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 

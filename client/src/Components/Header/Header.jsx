@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
-  console.log("user", user);
   const dispatch = useDispatch();
   const { setIsLoginModalOpen, setIsRegisterModalOpen } =
     useContext(ModalContext);
@@ -93,16 +92,27 @@ const Header = () => {
             >
               Contact Us
             </ScrollLink>
-            {user && user.role === "user" ? (
+            {user ? (
               <>
-                <Link
-                  to="/user-dashboard"
-                  className={`hover:text-textYellow transition ${
-                    isActive("/user-dashboard") ? "text-textYellow" : ""
-                  }`}
-                >
-                  Dashboard
-                </Link>
+                {user?.role === "admin" ? (
+                  <Link
+                    to="/dashboard"
+                    className={`hover:text-textYellow transition ${
+                      isActive("/dashboard") ? "text-textYellow" : ""
+                    }`}
+                  >
+                    Dashboard
+                  </Link>
+                ) : user?.role === "user" ? (
+                  <a
+                    href="http://localhost:5174/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-textYellow transition"
+                  >
+                    Dashboard
+                  </a>
+                ) : null}
 
                 <button
                   onClick={handleLogout}

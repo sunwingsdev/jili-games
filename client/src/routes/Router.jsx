@@ -35,6 +35,9 @@ import AdminLogin from "../Pages/AdminLogin/AdminLogin";
 import CreateNewGame from "../Pages/Dashboard/AddGames/CreateNewGame";
 import UpdateGame from "../Pages/Dashboard/AddGames/UpdateGame";
 import UserContacts from "../Pages/Dashboard/UserContacts/UserContacts";
+import CreatePackage from "../Pages/Dashboard/Package/CreatePackage/CreatePackage";
+import AllPackages from "../Pages/Dashboard/Package/AllPackages/AllPackages";
+import EditPackage from "../Pages/Dashboard/Package/EditPackage/EditPackage";
 
 const router = createBrowserRouter([
   {
@@ -99,6 +102,9 @@ const router = createBrowserRouter([
       { path: "edit-withdrawmethod/:id", element: <EditWithdrawMethodForm /> },
       { path: "withdraws", element: <WithdrawHistory /> },
       { path: "commissionsetting", element: <CommissionSetting /> },
+      { path: "createpackage", element: <CreatePackage /> },
+      { path: "editpackage/:id", element: <EditPackage /> },
+      { path: "allpackages", element: <AllPackages /> },
     ],
   },
   {

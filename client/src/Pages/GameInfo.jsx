@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useParams, useOutletContext } from "react-router";
 import chillImage from "../assets/Images/chill.png";
 import pcImage from "../assets/Images/pc.png";
 import tabletImage from "../assets/Images/tablet.png";
 import rotateImage from "../assets/Images/phone_horizon.png";
 import { useGetHomeGameByIdQuery } from "../redux/features/allApis/homeGamesApi/homeGamesApi";
+import { ImFilesEmpty } from "react-icons/im";
+import { FaLock, FaLockOpen } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { ModalContext } from "../providers/ModalProvider";
+import RelatedGames from "../Components/GameInfo/RelatedGames";
 
 const GameInfo = () => {
   const { id } = useParams();
-  const { data: singleGame } = useGetHomeGameByIdQuery(id);
+  const { user } = useSelector((state) => state.auth);
 
-  console.log(singleGame);
+  const { setIsPromoModalOpen } = useContext(ModalContext);
+
+  const { data: singleGame } = useGetHomeGameByIdQuery(id);
 
   const { setModalData } = useOutletContext();
 
@@ -30,6 +37,19 @@ const GameInfo = () => {
     const match = url.match(/(?:\?v=|\/embed\/|\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? `https://www.youtube.com/embed/${match[1]}` : "";
   };
+
+  const dummyData = [
+    { category: "Animation" },
+    { category: "Banners" },
+    { category: "Cut-Outs" },
+    { category: "Factsheets" },
+    { category: "Guidelines" },
+    { category: "Images" },
+    { category: "Logos" },
+    { category: "Poster" },
+    { category: "Thumbnails" },
+    { category: "Videos" },
+  ];
 
   return (
     <div className=" pt-20  text-white">
@@ -139,16 +159,17 @@ const GameInfo = () => {
         </div>
       </div>
       {singleGame?.gameTrailerLink?.trim() && (
-        <div className="flex items-center justify-center my-16">
-          <iframe
-            width="50%"
-            height="515"
-            src={convertToEmbedURL(singleGame.gameTrailerLink)}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+        <div className="flex justify-center my-16 px-2 md:px-0">
+          <div className="w-full max-w-4xl aspect-video">
+            <iframe
+              className="w-full h-full"
+              src={convertToEmbedURL(singleGame.gameTrailerLink)}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       )}
 
@@ -182,6 +203,26 @@ const GameInfo = () => {
           </p>
         </div>
       </div>
+
+      <div className="md:w-2/3 mx-auto px-2 md:px-0 py-4 flex flex-col gap-4">
+        {dummyData?.map((data, i) => (
+          <div
+            key={i}
+            onClick={!user ? () => setIsPromoModalOpen(true) : undefined}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 flex items-center justify-between p-4 cursor-pointer"
+          >
+            <div className="flex items-center gap-4">
+              <div className="bg-gray-500 w-8 h-8 rounded-full flex items-center justify-center">
+                <ImFilesEmpty className="text-lg text-white" />
+              </div>
+              <p className="text-xl">{data?.category}</p>
+            </div>
+            {user ? <FaLockOpen /> : <FaLock />}
+          </div>
+        ))}
+      </div>
+
+      <RelatedGames category={singleGame?.category} gameId={singleGame?._id} />
     </div>
   );
 };
