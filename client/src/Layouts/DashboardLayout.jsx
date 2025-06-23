@@ -5,6 +5,7 @@ import { BsBank, BsFront, BsPiggyBank, BsShop } from "react-icons/bs";
 import { FaAffiliatetheme, FaUsers } from "react-icons/fa";
 import { GiGamepadCross, GiRibbonMedal } from "react-icons/gi";
 import { IoIosContacts, IoMdHome } from "react-icons/io";
+import { GoPackage } from "react-icons/go";
 import {
   IoGameController,
   IoLogoWechat,
@@ -112,6 +113,14 @@ const DashboardLayout = () => {
         { label: "Play Stats" },
         { label: "Win Game Stats" },
         { label: "Loss Game Stats" },
+      ],
+    },
+    {
+      label: "Package",
+      icon: <GoPackage />,
+      submenu: [
+        { label: "Create Package", to: "/dashboard/createpackage" },
+        { label: "All Packages", to: "/dashboard/allpackages" },
       ],
     },
     { label: "Tournament", icon: <BsShop /> },

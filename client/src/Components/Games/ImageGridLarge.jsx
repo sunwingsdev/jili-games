@@ -46,7 +46,7 @@ const ImageGridLarge = ({ images, setModalData }) => {
           )}`}
         >
           <img
-            src={item.src} // ✅ Changed from item.image to item.src
+            src={item.src}
             alt={`game-${index}`}
             className="w-full h-96 object-cover"
           />

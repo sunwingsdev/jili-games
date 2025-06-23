@@ -38,6 +38,7 @@ import Loader from "../Components/Loader/Loader";
 import LoginModal from "../Components/Shared/LoginModal ";
 import { ModalContext } from "../providers/ModalProvider";
 import RegisterModal from "../Components/Shared/RegisterModal";
+import PromoModal from "../Components/Shared/PromoModal";
 
 const MainLayout = () => {
   const {
@@ -45,6 +46,8 @@ const MainLayout = () => {
     setIsLoginModalOpen,
     isRegisterModalOpen,
     setIsRegisterModalOpen,
+    isPromoModalOpen,
+    setIsPromoModalOpen,
   } = useContext(ModalContext);
   const navigation = useNavigation();
 
@@ -281,6 +284,17 @@ const MainLayout = () => {
         <RegisterModal
           isOpen={isRegisterModalOpen}
           onClose={() => setIsRegisterModalOpen(false)}
+          onSwitchToSignIn={() => {
+            setIsRegisterModalOpen(false);
+            setIsLoginModalOpen(true);
+          }}
+        />
+      )}
+
+      {isPromoModalOpen && (
+        <PromoModal
+          isOpen={isPromoModalOpen}
+          onClose={() => setIsPromoModalOpen(false)}
           onSwitchToSignIn={() => {
             setIsRegisterModalOpen(false);
             setIsLoginModalOpen(true);

@@ -31,6 +31,7 @@ const baseApi = createApi({
     "refercodes",
     "commission",
     "userContact",
+    "package",
   ],
   endpoints: () => ({}),
 });
