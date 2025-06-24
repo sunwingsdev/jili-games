@@ -4,7 +4,7 @@ const app = express();
 require("dotenv").config();
 const path = require("path");
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const { upload, deleteFile } = require("./utils"); // Import from utils.js
+const { upload, deleteFile } = require("./utils");
 
 // import API modules
 const usersApi = require("./apis/usersApi/usersApi");
@@ -27,6 +27,7 @@ const referCodeApi = require("./apis/referCodeApi/referCodeApi");
 const commissionApi = require("./apis/commissionApi/commissionApi");
 const userContactsApi = require("./apis/userContactsApi/userContactsApi");
 const packagesApi = require("./apis/packagesApi/packagesApi");
+const emailTemplateApi = require("./apis/emailTemplateApi/emailTemplateApi");
 
 const port = process.env.PORT || 5000;
 
@@ -166,6 +167,7 @@ async function run() {
     const balanceHistoryCollection = database.collection("balance-histories");
     const userContactsCollection = database.collection("user-contacts");
     const packagesCollection = database.collection("packages");
+    const emailTemplateCollection = database.collection("email-templates");
 
     // API routes
     app.use(
@@ -204,6 +206,7 @@ async function run() {
     app.use("/commissions", commissionApi(commissionsCollection));
     app.use("/user-contacts", userContactsApi(userContactsCollection));
     app.use("/packages", packagesApi(packagesCollection));
+    app.use("/email-templates", emailTemplateApi(emailTemplateCollection));
 
     await client.db("admin").command({ ping: 1 });
     console.log("Connected to MongoDB!!!✅");

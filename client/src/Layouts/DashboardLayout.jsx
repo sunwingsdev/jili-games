@@ -123,6 +123,14 @@ const DashboardLayout = () => {
         { label: "All Packages", to: "/dashboard/allpackages" },
       ],
     },
+    {
+      label: "Email Template",
+      icon: <GoPackage />,
+      submenu: [
+        { label: "Template Editor", to: "/dashboard/emaileditor" },
+        { label: "All Templates", to: "/dashboard/allemailtemplates" },
+      ],
+    },
     { label: "Tournament", icon: <BsShop /> },
     { label: "Jack Pot", icon: <BsShop /> },
     {

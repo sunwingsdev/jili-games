@@ -32,6 +32,7 @@ const baseApi = createApi({
     "commission",
     "userContact",
     "package",
+    "emailTemplate",
   ],
   endpoints: () => ({}),
 });
