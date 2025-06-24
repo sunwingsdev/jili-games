@@ -38,6 +38,9 @@ import UserContacts from "../Pages/Dashboard/UserContacts/UserContacts";
 import CreatePackage from "../Pages/Dashboard/Package/CreatePackage/CreatePackage";
 import AllPackages from "../Pages/Dashboard/Package/AllPackages/AllPackages";
 import EditPackage from "../Pages/Dashboard/Package/EditPackage/EditPackage";
+import EmailTemplateEditor from "../Pages/Dashboard/EmailTemplateEditor/EmailTemplateEditor";
+import AllEmailTemplates from "../Pages/Dashboard/EmailTemplateEditor/AllEmailTemplates";
+import EditEmailTemplate from "../Pages/Dashboard/EmailTemplateEditor/EditEmailTemplate";
 
 const router = createBrowserRouter([
   {
@@ -105,6 +108,9 @@ const router = createBrowserRouter([
       { path: "createpackage", element: <CreatePackage /> },
       { path: "editpackage/:id", element: <EditPackage /> },
       { path: "allpackages", element: <AllPackages /> },
+      { path: "emaileditor", element: <EmailTemplateEditor /> },
+      { path: "allemailtemplates", element: <AllEmailTemplates /> },
+      { path: "editemailtemplate/:id", element: <EditEmailTemplate /> },
     ],
   },
   {
